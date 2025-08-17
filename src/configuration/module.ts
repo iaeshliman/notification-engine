@@ -22,5 +22,6 @@ import { applicationNamespace } from './namespace/application'
             ignoreEnvFile: true,
         }),
     ],
+    exports: [ConfigModule],
 })
 export class ConfigurationModule {}
