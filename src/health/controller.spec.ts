@@ -5,6 +5,7 @@
 // NestJS Libraries
 import { Test, TestingModule } from '@nestjs/testing'
 import { TerminusModule } from '@nestjs/terminus'
+import { ServiceUnavailableException } from '@nestjs/common'
 
 // Modules
 import { ConfigurationModule } from '../configuration/module'
@@ -19,21 +20,25 @@ import { ApplicationHealthIndicator } from './indicators/application'
 
 describe('HealthController', () => {
     let controller: HealthController
+    let applicationHealthIndicator: ApplicationHealthIndicator
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            imports: [TerminusModule, ConfigurationModule],
+            imports: [TerminusModule.forRoot({ logger: false }), ConfigurationModule],
             controllers: [HealthController],
             providers: [ApplicationHealthIndicator],
         }).compile()
 
         controller = module.get<HealthController>(HealthController)
+        applicationHealthIndicator = module.get<ApplicationHealthIndicator>(ApplicationHealthIndicator)
+
+        jest.spyOn(applicationHealthIndicator, 'check').mockImplementation(() => ({
+            application: { status: 'up' },
+        }))
     })
 
     it('should be defined', () => {
         expect(controller).toBeDefined()
-
-        controller.liveness()
     })
 
     describe('liveness', () => {
@@ -45,6 +50,14 @@ describe('HealthController', () => {
             const result = await controller.liveness()
 
             expect(result.status).toBe('ok')
+        })
+
+        it('should return down', async () => {
+            jest.spyOn(applicationHealthIndicator, 'check').mockImplementation(() => ({
+                application: { status: 'down' },
+            }))
+
+            await expect(controller.liveness()).rejects.toThrow(ServiceUnavailableException)
         })
 
         it('should check only required indicators', async () => {
@@ -66,6 +79,14 @@ describe('HealthController', () => {
             const result = await controller.readiness()
 
             expect(result.status).toBe('ok')
+        })
+
+        it('should return down', async () => {
+            jest.spyOn(applicationHealthIndicator, 'check').mockImplementation(() => ({
+                application: { status: 'down' },
+            }))
+
+            await expect(controller.readiness()).rejects.toThrow(ServiceUnavailableException)
         })
 
         it('should check only required indicators', async () => {
