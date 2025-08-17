@@ -47,5 +47,6 @@ Thumbs.db
 /.cache
 .parcel-cache
 
-# Environment
+# Sensitive Files
 .env
+config/
