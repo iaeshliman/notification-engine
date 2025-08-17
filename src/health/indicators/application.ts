@@ -3,7 +3,7 @@
  */
 
 import { Inject, Injectable } from '@nestjs/common'
-import { HealthIndicatorService } from '@nestjs/terminus'
+import { HealthIndicatorResult, HealthIndicatorService } from '@nestjs/terminus'
 import type { ConfigType } from '@nestjs/config'
 
 // Configuration Module
@@ -21,7 +21,7 @@ export class ApplicationHealthIndicator {
         private readonly applicationConfiguration: ConfigType<typeof applicationNamespace>
     ) {}
 
-    check() {
+    check(): HealthIndicatorResult {
         const indicator = this.healthIndicatorService.check('application')
         const configuration = this.applicationConfiguration
 
