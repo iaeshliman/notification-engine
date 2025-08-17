@@ -46,3 +46,7 @@ Thumbs.db
 # Build
 /.cache
 .parcel-cache
+
+# Sensitive Files
+.env
+config/
