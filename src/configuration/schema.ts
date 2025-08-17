@@ -9,6 +9,7 @@ import Joi from 'joi'
  */
 
 export const schema = Joi.object({
-    ENCRYPTION_KEY: Joi.string().base64(),
-    NODE_ENV: Joi.string().valid('development', 'production'),
+    ENCRYPTION_KEY: Joi.string().base64().required(),
+    NODE_ENV: Joi.string().valid('development', 'production').required(),
+    VERSION: Joi.string().required(),
 })
