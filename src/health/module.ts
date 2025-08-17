@@ -7,7 +7,7 @@ import { Module } from '@nestjs/common'
 import { TerminusModule } from '@nestjs/terminus'
 
 // Modules
-import { ConfigurationModule } from 'src/configuration/module'
+import { ConfigurationModule } from '../configuration/module'
 
 // Health Module
 import { HealthController } from './controller'

@@ -22,7 +22,7 @@ describe('HealthController', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            imports: [TerminusModule],
+            imports: [TerminusModule, ConfigurationModule],
             controllers: [HealthController],
             providers: [ApplicationHealthIndicator],
         }).compile()
@@ -33,7 +33,7 @@ describe('HealthController', () => {
     it('should be defined', () => {
         expect(controller).toBeDefined()
 
-        controller.liveness().then(console.log).catch(console.error)
+        controller.liveness()
     })
 
     describe('liveness', () => {
@@ -47,7 +47,7 @@ describe('HealthController', () => {
             expect(result.status).toBe('ok')
         })
 
-        it('should check required indicators', async () => {
+        it('should check only required indicators', async () => {
             const result = await controller.liveness()
             const found = Object.keys(result.details)
             const expected = ['application']
@@ -68,7 +68,7 @@ describe('HealthController', () => {
             expect(result.status).toBe('ok')
         })
 
-        it('should check required indicators', async () => {
+        it('should check only required indicators', async () => {
             const result = await controller.readiness()
             const found = Object.keys(result.details)
             const expected = ['application']
