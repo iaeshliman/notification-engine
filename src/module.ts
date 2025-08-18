@@ -7,6 +7,7 @@ import { Module } from '@nestjs/common'
 
 // Modules
 import { ConfigurationModule } from './configuration/module'
+import { LoggingModule } from './logging/module'
 import { HealthModule } from './health/module'
 
 /**
@@ -14,6 +15,6 @@ import { HealthModule } from './health/module'
  */
 
 @Module({
-    imports: [ConfigurationModule, HealthModule],
+    imports: [ConfigurationModule, LoggingModule, HealthModule],
 })
 export class RootModule {}
