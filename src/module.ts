@@ -4,6 +4,8 @@
 
 // NestJS Libraries
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'
 
 // External Libraries
 import { ClsModule } from 'nestjs-cls'
@@ -21,7 +23,17 @@ import { TelemetryMiddleware } from './telemetry/middleware'
  */
 
 @Module({
-    imports: [ConfigurationModule, ClsModule.forRoot({ middleware: { mount: true } }), LoggingModule, HealthModule],
+    imports: [
+        ConfigurationModule,
+        ClsModule.forRoot({ middleware: { mount: true } }),
+        LoggingModule,
+        TypeOrmModule.forRootAsync({
+            imports: [ConfigurationModule],
+            inject: [ConfigService],
+            useFactory: (configService: ConfigService) => configService.get<TypeOrmModuleOptions>('database')!,
+        }),
+        HealthModule,
+    ],
 })
 export class RootModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
