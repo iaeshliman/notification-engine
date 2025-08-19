@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config'
 import { schema } from './schema'
 import { applicationNamespace } from './namespace/application'
 import { loggingNamespace } from './namespace/logging'
+import { databaseNamespace } from './namespace/database'
 
 /**
  * Module
@@ -18,7 +19,7 @@ import { loggingNamespace } from './namespace/logging'
 @Module({
     imports: [
         ConfigModule.forRoot({
-            load: [applicationNamespace, loggingNamespace],
+            load: [applicationNamespace, loggingNamespace, databaseNamespace],
             validationSchema: schema,
             ignoreEnvFile: true,
         }),
