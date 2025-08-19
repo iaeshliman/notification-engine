@@ -3,12 +3,15 @@
  */
 
 // NestJS Libraries
-import { Module } from '@nestjs/common'
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 
 // Modules
 import { ConfigurationModule } from './configuration/module'
 import { LoggingModule } from './logging/module'
 import { HealthModule } from './health/module'
+
+// Middleware
+import { TelemetryMiddleware } from './telemetry/middleware'
 
 /**
  * Module
@@ -17,4 +20,8 @@ import { HealthModule } from './health/module'
 @Module({
     imports: [ConfigurationModule, LoggingModule, HealthModule],
 })
-export class RootModule {}
+export class RootModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(TelemetryMiddleware).forRoutes('*path')
+    }
+}
