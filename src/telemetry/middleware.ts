@@ -8,6 +8,7 @@ import { Injectable, NestMiddleware } from '@nestjs/common'
 // External Libraries
 import { NextFunction, Response } from 'express'
 import { v4 } from 'uuid'
+import { ClsService } from 'nestjs-cls'
 
 // Telemetry Module
 import { Request } from './interfaces'
@@ -24,10 +25,12 @@ const TRACEPARENT_HEADER = 'traceparent'
 
 @Injectable()
 export class TelemetryMiddleware implements NestMiddleware {
-    constructor() {}
+    constructor(private readonly clsService: ClsService) {}
 
     use(req: Request, res: Response, next: NextFunction) {
         req.telemetry = { trace: this.getTrace(req) }
+
+        this.clsService.set('id', req.telemetry.trace)
 
         return next()
     }

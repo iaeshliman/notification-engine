@@ -12,13 +12,14 @@ import { HealthModule } from './health/module'
 
 // Middleware
 import { TelemetryMiddleware } from './telemetry/middleware'
+import { ClsModule } from 'nestjs-cls'
 
 /**
  * Module
  */
 
 @Module({
-    imports: [ConfigurationModule, LoggingModule, HealthModule],
+    imports: [ConfigurationModule, ClsModule.forRoot({ middleware: { mount: true } }), LoggingModule, HealthModule],
 })
 export class RootModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
