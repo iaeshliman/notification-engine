@@ -30,7 +30,8 @@ export class TelemetryMiddleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
         req.telemetry = { trace: this.getTrace(req) }
 
-        this.clsService.set('id', req.telemetry.trace)
+        // Add trace id to cls for use in logging
+        this.clsService.set('traceId', req.telemetry.trace)
 
         return next()
     }

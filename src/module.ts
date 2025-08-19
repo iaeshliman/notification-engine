@@ -5,6 +5,9 @@
 // NestJS Libraries
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 
+// External Libraries
+import { ClsModule } from 'nestjs-cls'
+
 // Modules
 import { ConfigurationModule } from './configuration/module'
 import { LoggingModule } from './logging/module'
@@ -12,7 +15,6 @@ import { HealthModule } from './health/module'
 
 // Middleware
 import { TelemetryMiddleware } from './telemetry/middleware'
-import { ClsModule } from 'nestjs-cls'
 
 /**
  * Module

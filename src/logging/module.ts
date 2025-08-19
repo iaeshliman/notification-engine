@@ -5,6 +5,9 @@
 // NestJS Libraries
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 
+// External Libraries
+import { ClsModule } from 'nestjs-cls'
+
 // Modules
 import { ConfigurationModule } from '../configuration/module'
 
@@ -17,7 +20,7 @@ import { AccessLogMiddleware } from './middleware'
  */
 
 @Module({
-    imports: [ConfigurationModule],
+    imports: [ConfigurationModule, ClsModule],
     providers: [LoggingService],
     exports: [LoggingService],
 })
