@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config'
 
 // Modules
 import { RootModule } from './module'
+import { LoggingService } from './logging/service'
 
 /**
  * Bootstrap
@@ -19,7 +20,9 @@ async function bootstrap() {
      * Create application
      */
 
-    const app = await NestFactory.create(RootModule)
+    const app = await NestFactory.create(RootModule, { bufferLogs: true })
+    const logger = await app.resolve(LoggingService)
+    app.useLogger(logger)
 
     /**
      * Configure application

@@ -9,6 +9,7 @@ import type { ConfigType } from '@nestjs/config'
 
 // External Libraries
 import { addColors, createLogger, format, Logger, transports } from 'winston'
+import { ClsService } from 'nestjs-cls'
 
 // Configuration Module
 import { loggingNamespace } from '../configuration/namespace/logging'
@@ -34,9 +35,10 @@ export class LoggingService implements LoggerService {
     constructor(
         @Inject(loggingNamespace.KEY)
         private readonly loggingConfiguration: ConfigType<typeof loggingNamespace>,
-        @Inject(INQUIRER) private readonly parent: object
+        @Inject(INQUIRER) private readonly parent: object,
+        private readonly clsService: ClsService
     ) {
-        this.context = this.parent.constructor.name
+        this.context = this.parent.constructor.name === this.constructor.name ? 'System' : this.parent.constructor.name
         this.logger = createLogger({
             level: this.loggingConfiguration.level,
             levels: Object.values(LogLevel).reduce<Record<string, number>>((acc, level, index) => {
@@ -64,7 +66,12 @@ export class LoggingService implements LoggerService {
                         const parts = [new Date().toISOString()]
                         parts.push(info.level.padEnd(LEVEL_PADDING))
                         parts.push(`[Context:${this.context}]`)
+
+                        const trace = this.clsService.get('traceId')
+                        if (typeof trace === 'string') parts.push(`[Trace:${trace}]`)
+
                         parts.push(`${info.message}`)
+
                         try {
                             parts.push(JSON.stringify(info.meta))
                         } catch (error) {}
@@ -77,9 +84,12 @@ export class LoggingService implements LoggerService {
                 formats.push(
                     format.printf((info) => {
                         try {
+                            const trace = this.clsService.get('traceId')
+
                             return JSON.stringify({
                                 level: info.level,
                                 context: this.context,
+                                trace: typeof trace === 'string' ? trace : undefined,
                                 message: info.message,
                                 meta: info.meta,
                             })
