@@ -36,7 +36,7 @@ export class LoggingService implements LoggerService {
         private readonly loggingConfiguration: ConfigType<typeof loggingNamespace>,
         @Inject(INQUIRER) private readonly parent: object
     ) {
-        this.context = this.parent.constructor.name
+        this.context = this.parent.constructor.name === this.constructor.name ? 'System' : this.parent.constructor.name
         this.logger = createLogger({
             level: this.loggingConfiguration.level,
             levels: Object.values(LogLevel).reduce<Record<string, number>>((acc, level, index) => {
