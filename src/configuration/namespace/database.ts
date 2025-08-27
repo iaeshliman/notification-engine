@@ -6,7 +6,7 @@
 import { registerAs } from '@nestjs/config'
 
 // External Libraries
-import { IsNumber, IsOptional, IsString, IsUrl, Max, Min } from 'class-validator'
+import { IsBoolean, IsNumber, IsOptional, IsString, IsUrl, Max, Min } from 'class-validator'
 
 // Configuration Module
 import { loadNamespace } from '../utils'
@@ -40,6 +40,10 @@ export class DatabaseConfiguration {
     @IsOptional()
     @IsString()
     database?: string
+
+    @IsOptional()
+    @IsBoolean()
+    autoLoadEntities = true
 }
 
 /**
