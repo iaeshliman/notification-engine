@@ -4,7 +4,7 @@
 
 // NestJS Libraries
 import { NestFactory } from '@nestjs/core'
-import { VersioningType } from '@nestjs/common'
+import { ValidationPipe, VersioningType } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
 // Modules
@@ -31,6 +31,16 @@ async function bootstrap() {
     app.enableShutdownHooks()
     app.setGlobalPrefix('api')
     app.enableVersioning({ type: VersioningType.URI })
+
+    // Pipes
+    app.useGlobalPipes(
+        new ValidationPipe({
+            whitelist: true,
+            forbidNonWhitelisted: true,
+            transform: true,
+            transformOptions: { enableImplicitConversion: true },
+        })
+    )
 
     /**
      * TODO

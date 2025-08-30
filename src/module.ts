@@ -10,13 +10,13 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'
 // External Libraries
 import { ClsModule } from 'nestjs-cls'
 
+// Middleware
+import { TelemetryMiddleware } from './telemetry/middleware'
+
 // Modules
 import { ConfigurationModule } from './configuration/module'
 import { LoggingModule } from './logging/module'
 import { HealthModule } from './health/module'
-
-// Middleware
-import { TelemetryMiddleware } from './telemetry/middleware'
 
 /**
  * Module
