@@ -41,9 +41,11 @@ export class DatabaseConfiguration {
     @IsString()
     database?: string
 
-    @IsOptional()
     @IsBoolean()
     autoLoadEntities = true
+
+    @IsBoolean()
+    synchronize = false
 }
 
 /**
